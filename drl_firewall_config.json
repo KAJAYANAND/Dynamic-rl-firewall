@@ -1,0 +1,52 @@
+{
+  "system_configuration": {
+    "model_parameters": {
+      "lstm_sequence_length": 50,
+      "dqn_state_size": 10,
+      "dqn_action_size": 4,
+      "learning_rate": 0.001,
+      "epsilon_decay": 0.99,
+      "gamma": 0.95,
+      "memory_size": 10000
+    },
+    "network_features": [
+      "packet_size",
+      "connection_duration",
+      "bytes_sent",
+      "bytes_received",
+      "flow_duration",
+      "dest_port",
+      "protocol"
+    ],
+    "action_mapping": [
+      "ALLOW",
+      "BLOCK",
+      "RATE_LIMIT",
+      "LOG_ONLY"
+    ],
+    "reward_structure": {
+      "correct_block_attack": 20,
+      "correct_allow_normal": 10,
+      "false_positive_penalty": -20,
+      "false_negative_penalty": -30
+    }
+  },
+  "deployment_guide": {
+    "requirements": [
+      "Python 3.7+",
+      "scikit-learn",
+      "numpy",
+      "pandas",
+      "SDN Controller (OpenDaylight/ONOS)",
+      "Network monitoring tools"
+    ],
+    "installation_steps": [
+      "1. Install dependencies",
+      "2. Configure SDN controller",
+      "3. Set up traffic monitoring",
+      "4. Deploy ML models",
+      "5. Initialize DQN agent",
+      "6. Begin adaptive learning"
+    ]
+  }
+}

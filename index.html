@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Reinforcement Learning Firewall</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1>Dynamic RL Firewall</h1>
+                <div class="header-status">
+                    <div class="status-indicator active">
+                        <span class="status-dot"></span>
+                        System Active
+                    </div>
+                    <div class="system-time" id="systemTime"></div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Navigation -->
+        <nav class="navigation">
+            <button class="nav-btn active" data-tab="dashboard">Dashboard</button>
+            <button class="nav-btn" data-tab="simulation">Traffic Simulation</button>
+            <button class="nav-btn" data-tab="agent">RL Agent</button>
+            <button class="nav-btn" data-tab="rules">Firewall Rules</button>
+            <button class="nav-btn" data-tab="analytics">Analytics</button>
+            <button class="nav-btn" data-tab="architecture">Architecture</button>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Dashboard Tab -->
+            <section id="dashboard" class="tab-content active">
+                <div class="dashboard-grid">
+                    <!-- Live Traffic Monitor -->
+                    <div class="card traffic-monitor">
+                        <div class="card-header">
+                            <h3>Live Network Traffic</h3>
+                            <span class="traffic-rate" id="trafficRate">1,247 pps</span>
+                        </div>
+                        <div class="traffic-visualization">
+                            <div class="traffic-flow" id="trafficFlow"></div>
+                            <div class="traffic-legend">
+                                <div class="legend-item normal">Normal</div>
+                                <div class="legend-item threat">Threats</div>
+                                <div class="legend-item blocked">Blocked</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Threat Detection -->
+                    <div class="card threat-detection">
+                        <div class="card-header">
+                            <h3>Threat Detection</h3>
+                            <div class="alert-level" id="alertLevel">LOW</div>
+                        </div>
+                        <div class="threat-counters">
+                            <div class="counter">
+                                <span class="counter-value" id="threatsDetected">0</span>
+                                <span class="counter-label">Threats Detected</span>
+                            </div>
+                            <div class="counter">
+                                <span class="counter-value" id="threatsBlocked">0</span>
+                                <span class="counter-label">Threats Blocked</span>
+                            </div>
+                            <div class="counter">
+                                <span class="counter-value" id="falsePositives">0</span>
+                                <span class="counter-label">False Positives</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Performance Metrics -->
+                    <div class="card performance-metrics">
+                        <div class="card-header">
+                            <h3>Performance Metrics</h3>
+                        </div>
+                        <div class="metrics-grid">
+                            <div class="metric">
+                                <div class="metric-value" id="accuracy">0%</div>
+                                <div class="metric-label">Accuracy</div>
+                            </div>
+                            <div class="metric">
+                                <div class="metric-value" id="responseTime">0ms</div>
+                                <div class="metric-label">Response Time</div>
+                            </div>
+                            <div class="metric">
+                                <div class="metric-value" id="fpRate">0%</div>
+                                <div class="metric-label">False Positive Rate</div>
+                            </div>
+                            <div class="metric">
+                                <div class="metric-value" id="throughput">0</div>
+                                <div class="metric-label">Packets/sec</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Active Rules -->
+                    <div class="card active-rules">
+                        <div class="card-header">
+                            <h3>Active Firewall Rules</h3>
+                            <div class="rule-update-status">
+                                <span id="ruleUpdateStatus"></span>
+                            </div>
+                        </div>
+                        <div class="rules-list" id="activeRulesList"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Traffic Simulation Tab -->
+            <section id="simulation" class="tab-content">
+                <div class="simulation-grid">
+                    <div class="card simulation-controls">
+                        <div class="card-header">
+                            <h3>Traffic Simulation Controls</h3>
+                        </div>
+                        <div class="controls-group">
+                            <div class="control-item">
+                                <label class="form-label">Traffic Type</label>
+                                <select class="form-control" id="trafficType">
+                                    <option value="normal">Normal Traffic</option>
+                                    <option value="ddos">DDoS Attack</option>
+                                    <option value="malware">Malware</option>
+                                    <option value="recon">Reconnaissance</option>
+                                    <option value="exfiltration">Data Exfiltration</option>
+                                </select>
+                            </div>
+                            <div class="control-item">
+                                <label class="form-label">Traffic Intensity</label>
+                                <input type="range" class="intensity-slider" id="intensitySlider" min="1" max="20" value="5">
+                                <span class="intensity-value" id="intensityValue">5</span>
+                            </div>
+                            <div class="control-buttons">
+                                <button class="btn btn--primary" id="startSimulation">Start Simulation</button>
+                                <button class="btn btn--secondary" id="stopSimulation">Stop Simulation</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card traffic-distribution">
+                        <div class="card-header">
+                            <h3>Traffic Distribution</h3>
+                        </div>
+                        <div class="chart-container" style="position: relative; height: 300px;">
+                            <canvas id="trafficChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="card simulation-log">
+                        <div class="card-header">
+                            <h3>Simulation Log</h3>
+                            <button class="btn btn--sm btn--outline" id="clearLog">Clear</button>
+                        </div>
+                        <div class="log-container" id="simulationLog"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- RL Agent Tab -->
+            <section id="agent" class="tab-content">
+                <div class="agent-grid">
+                    <div class="card training-progress">
+                        <div class="card-header">
+                            <h3>Training Progress</h3>
+                        </div>
+                        <div class="chart-container" style="position: relative; height: 250px;">
+                            <canvas id="trainingChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="card reward-function">
+                        <div class="card-header">
+                            <h3>Reward Function</h3>
+                        </div>
+                        <div class="reward-display">
+                            <div class="reward-item">
+                                <span class="reward-label">Correct Block</span>
+                                <span class="reward-value positive">+10</span>
+                            </div>
+                            <div class="reward-item">
+                                <span class="reward-label">Correct Allow</span>
+                                <span class="reward-value positive">+5</span>
+                            </div>
+                            <div class="reward-item">
+                                <span class="reward-label">False Positive</span>
+                                <span class="reward-value negative">-15</span>
+                            </div>
+                            <div class="reward-item">
+                                <span class="reward-label">False Negative</span>
+                                <span class="reward-value negative">-25</span>
+                            </div>
+                        </div>
+                        <div class="current-reward">
+                            Current Episode Reward: <span id="currentReward">+847</span>
+                        </div>
+                    </div>
+
+                    <div class="card agent-stats">
+                        <div class="card-header">
+                            <h3>Agent Statistics</h3>
+                        </div>
+                        <div class="stats-grid">
+                            <div class="stat">
+                                <div class="stat-value" id="episodes">50,000</div>
+                                <div class="stat-label">Training Episodes</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-value" id="learningRate">0.001</div>
+                                <div class="stat-label">Learning Rate</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-value" id="explorationRate">10%</div>
+                                <div class="stat-label">Exploration Rate</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-value" id="memorySize">10K</div>
+                                <div class="stat-label">Memory Size</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card policy-state">
+                        <div class="card-header">
+                            <h3>Current Policy State</h3>
+                        </div>
+                        <div class="policy-visualization">
+                            <div class="policy-actions">
+                                <div class="action-item">
+                                    <span class="action-name">BLOCK</span>
+                                    <div class="action-confidence">
+                                        <div class="confidence-bar" style="width: 85%"></div>
+                                        <span class="confidence-value">85%</span>
+                                    </div>
+                                </div>
+                                <div class="action-item">
+                                    <span class="action-name">ALLOW</span>
+                                    <div class="action-confidence">
+                                        <div class="confidence-bar" style="width: 92%"></div>
+                                        <span class="confidence-value">92%</span>
+                                    </div>
+                                </div>
+                                <div class="action-item">
+                                    <span class="action-name">LIMIT</span>
+                                    <div class="action-confidence">
+                                        <div class="confidence-bar" style="width: 78%"></div>
+                                        <span class="confidence-value">78%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Firewall Rules Tab -->
+            <section id="rules" class="tab-content">
+                <div class="rules-grid">
+                    <div class="card rules-management">
+                        <div class="card-header">
+                            <h3>Dynamic Rule Management</h3>
+                            <div class="rule-update-controls">
+                                <label for="autoUpdateSwitch" class="toggle-label">Auto-Update</label>
+                                <label class="switch">
+                                    <input type="checkbox" id="autoUpdateSwitch" checked>
+                                    <span class="slider round"></span>
+                                </label>
+                                <button class="btn btn--primary btn--sm" id="addRule">Add Rule</button>
+                            </div>
+                        </div>
+                        <div class="rules-table">
+                            <div class="table-header">
+                                <div class="th">Rule</div>
+                                <div class="th">Priority</div>
+                                <div class="th">Confidence</div>
+                                <div class="th">Action</div>
+                                <div class="th">Controls</div>
+                            </div>
+                            <div class="table-body" id="rulesTableBody"></div>
+                        </div>
+                    </div>
+
+                    <div class="card rule-effectiveness">
+                        <div class="card-header">
+                            <h3>Rule Effectiveness</h3>
+                        </div>
+                        <div class="chart-container" style="position: relative; height: 300px;">
+                            <canvas id="effectivenessChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="card rule-history">
+                        <div class="card-header">
+                            <h3>Rule History</h3>
+                        </div>
+                        <div class="history-list" id="ruleHistory"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Analytics Tab -->
+            <section id="analytics" class="tab-content">
+                <div class="analytics-grid">
+                    <div class="card accuracy-chart">
+                        <div class="card-header">
+                            <h3>Detection Accuracy Over Time</h3>
+                        </div>
+                        <div class="chart-container" style="position: relative; height: 250px;">
+                            <canvas id="accuracyChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="card threat-distribution">
+                        <div class="card-header">
+                            <h3>Threat Distribution</h3>
+                        </div>
+                        <div class="chart-container" style="position: relative; height: 250px;">
+                            <canvas id="threatChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="card performance-comparison">
+                        <div class="card-header">
+                            <h3>RL vs Static Firewall</h3>
+                        </div>
+                        <div class="chart-container" style="position: relative; height: 250px;">
+                            <canvas id="comparisonChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="card response-metrics">
+                        <div class="card-header">
+                            <h3>Response Time Metrics</h3>
+                        </div>
+                        <div class="chart-container" style="position: relative; height: 250px;">
+                            <canvas id="responseChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Architecture Tab -->
+            <section id="architecture" class="tab-content">
+                <div class="architecture-grid">
+                    <div class="card system-diagram">
+                        <div class="card-header">
+                            <h3>System Architecture</h3>
+                        </div>
+                        <div class="diagram-container">
+                            <img src="https://ppl-ai-code-interpreter-files.s3.amazonaws.com/web/direct-files/a39716830d68ae839c6edda11aa4b84b/fc426f04-9eec-43ca-8110-6ffeb08f8b46/fe505907.png" alt="RL Firewall Architecture" class="architecture-diagram">
+                        </div>
+                    </div>
+
+                    <div class="card component-status">
+                        <div class="card-header">
+                            <h3>Component Status</h3>
+                        </div>
+                        <div class="components-list" id="componentsList"></div>
+                    </div>
+
+                    <div class="card data-flow">
+                        <div class="card-header">
+                            <h3>Data Flow Monitoring</h3>
+                        </div>
+                        <div class="flow-metrics">
+                            <div class="flow-item">
+                                <span class="flow-label">Input Layer</span>
+                                <div class="flow-indicator active"></div>
+                                <span class="flow-rate">1.2K pps</span>
+                            </div>
+                            <div class="flow-item">
+                                <span class="flow-label">Feature Extraction</span>
+                                <div class="flow-indicator active"></div>
+                                <span class="flow-rate">1.2K fps</span>
+                            </div>
+                            <div class="flow-item">
+                                <span class="flow-label">LSTM-CNN</span>
+                                <div class="flow-indicator active"></div>
+                                <span class="flow-rate">1.1K ops</span>
+                            </div>
+                            <div class="flow-item">
+                                <span class="flow-label">DQN Agent</span>
+                                <div class="flow-indicator learning"></div>
+                                <span class="flow-rate">850 decisions</span>
+                            </div>
+                            <div class="flow-item">
+                                <span class="flow-label">SDN Controller</span>
+                                <div class="flow-indicator active"></div>
+                                <span class="flow-rate">1.1K actions</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
